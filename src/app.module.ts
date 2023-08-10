@@ -7,6 +7,8 @@ import { AuthModule } from './auth/auth.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { FilesModule } from './files/files.module';
 import { ProductModule } from './product/product.module';
+import { MailModule } from './mail/mail.module';
+import { GoogleStrategy } from './auth/google.strategy'
 
 @Module({
   imports: [
@@ -17,7 +19,7 @@ import { ProductModule } from './product/product.module';
       username: 'project',
       password: 'Admin2016!',
       database: 'Biw',
-      entities: [__dirname + '/../**/*.entity.js'] ,
+      entities: [__dirname + '/../**/*.entity.js'],
       synchronize: true,
     }),
     MulterModule,
@@ -25,8 +27,9 @@ import { ProductModule } from './product/product.module';
     AuthModule,
     FilesModule,
     ProductModule,
+    MailModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService,GoogleStrategy],
 })
 export class AppModule { }

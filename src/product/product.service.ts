@@ -16,15 +16,21 @@ export class ProductService {
     return this.productRepository.save(createProductDto)
   }
 
-  findAll() {
-    return this.productRepository.find();
+  async findAll() {
+    let response: any = []
+    response = await this.productRepository.find()
+    let total: number = response.length
+    return {
+      response,
+      total
+    }
   }
-
   findOne(id: number) {
     return this.productRepository.findOneBy({ id });
   }
 
   update(id: number, updateProductDto: UpdateProductDto) {
+      updateProductDto.quantity === '0' ? updateProductDto.status = '0': ''
     return this.productRepository.update(id, updateProductDto)
   }
 

@@ -4,22 +4,23 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
-import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
-
+import { MailService } from 'src/mail/mail.service';
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
+    private MailService: MailService
   ) { }
   async create(createUserDto: CreateUserDto) {
     let x = await this.findByUsername(createUserDto.email)
-    if(x === null){
+    if (x === null) {
+      this.MailService.postMail(createUserDto)
       return this.usersRepository.save(createUserDto)
-    }else{
+    } else {
       throw new HttpException('Email already used', HttpStatus.CONFLICT);
     }
-   
+
   }
 
   findAll(): Promise<User[]> {
@@ -39,6 +40,6 @@ export class UsersService {
   }
 
   async findByUsername(email: any): Promise<User | null> {
-    return await this.usersRepository.findOne({where: {email}});
+    return await this.usersRepository.findOne({ where: { email } });
   }
 }
