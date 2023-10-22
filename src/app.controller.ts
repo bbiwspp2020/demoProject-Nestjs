@@ -10,6 +10,11 @@ export class AppController {
     private readonly appService: AppService
   ) { }
 
+  @Get()
+  hello(){
+    return this.appService.getHello()
+  }
+
   @Post('auth/login')
   async login(@Body('email') email: string, @Body('password') password: string) {
     return this.authService.validateUser(email, password);
